@@ -1,0 +1,21 @@
+.select-field select {
+    border: 1px solid var(--light-gray);
+    padding: 8px 14px;
+    font-size: 15.5px;
+    border-radius: 8px;
+    color: var(--eclipse);
+    background-color: transparent;
+    width: 100%;
+    outline: none;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.select-field select:hover {
+    border-color: var(--grey);
+}
+
+.select-field select:focus {
+    border: 1px solid var(--dark-charcoal);
+    box-shadow: 0 0 0 2px rgba(172, 172, 172, 0.1);
+}

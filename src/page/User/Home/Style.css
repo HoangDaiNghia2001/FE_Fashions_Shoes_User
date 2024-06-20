@@ -1,0 +1,92 @@
+.button-custom {
+    z-index: 1;
+    position: relative;
+    border: 1px solid var(--red);
+    background-color: var(--red);
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    overflow: hidden;
+    transition: color 0.4s ease-in-out;
+    transition: 0.5s;
+    font-weight: bold;
+    border-radius: 18px;
+}
+
+.button-custom::before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--white);
+    transform-origin: center;
+    transform: translate3d(-60%, -60%, 0) scale3d(0, 0, 0);
+    transition: transform 0.45s ease-in-out;
+}
+
+.button-custom:hover {
+    cursor: pointer;
+    color: var(--red);
+}
+
+.button-custom:hover::before {
+    transform: translate3d(-100%, -100%, 0) scale3d(25, 25, 25);
+}
+
+.button-disable {
+    z-index: 1;
+    text-transform: uppercase !important;
+    border: 1px solid var(--red);
+    background-color: var(--red);
+    color: var(--white);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    overflow: hidden;
+    font-weight: bold;
+    border-radius: 18px;
+    opacity: 0.7;
+    cursor: no-drop;
+}
+
+.button-cancel {
+    z-index: 1;
+    position: relative;
+    border: 1px solid var(--light-gray);
+    background-color: var(--light-gray);
+    color: var(--dark-charcoal);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    overflow: hidden;
+    transition: color 0.4s ease-in-out;
+    transition: 0.5s;
+    font-weight: bold;
+    border-radius: 18px;
+}
+
+.button-cancel::before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--red);
+    transform-origin: center;
+    transform: translate3d(-50%, -50%, 0) scale3d(0, 0, 0);
+    transition: transform 0.45s ease-in-out;
+}
+
+.button-cancel:hover {
+    cursor: pointer;
+    color: var(--white);
+}
+
+.button-cancel:hover::before {
+    transform: translate3d(-100%, -100%, 0) scale3d(15, 15, 15);
+}

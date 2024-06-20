@@ -1,0 +1,33 @@
+.select-image button {
+    z-index: 1;
+    position: relative;
+    color: var(--red);
+    outline: none;
+    font-weight: bold;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid var(--red);
+    background-color: transparent;
+    transition: all 0.25s ease-in-out;
+}
+
+.select-image button::before {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background-color: var(--red);
+    transform-origin: center right;
+    transform: scaleX(0);
+    transition: transform 0.25s ease-in-out;
+}
+
+.select-image button:hover {
+    cursor: pointer;
+    color: var(--white);
+}
+
+.select-image button:hover::before {
+    transform-origin: center left;
+    transform: scaleY(2);
+}

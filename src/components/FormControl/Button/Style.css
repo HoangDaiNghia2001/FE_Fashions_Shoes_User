@@ -1,0 +1,40 @@
+.button-form button {
+    position: relative;
+    color: var(--white);
+    border: none;
+    background-color: var(--eclipse);
+    outline: none;
+    height: 40px;
+    padding: 4px 86px;
+    font-size: 16.5px;
+    letter-spacing: 2.5px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: none;
+    z-index: 1;
+    font-weight: bold;
+    transition: all 0.25s ease-in-out;
+}
+
+.button-form button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--red);
+    border: none;
+    transform-origin: center top;
+    transform: scaleY(0);
+    border-radius: 8px;
+    transition: transform 0.25s ease-in-out;
+}
+
+.button-form button:hover {
+    cursor: pointer;
+    color: var(--white);
+}
+
+.button-form button:hover::before {
+    transform-origin: center bottom;
+    transform: scaleY(1);
+}

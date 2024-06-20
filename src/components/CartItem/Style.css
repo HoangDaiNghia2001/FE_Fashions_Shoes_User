@@ -1,0 +1,18 @@
+.cart--item .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):hover .ant-select-selector {
+    border-color: var(--red) !important;
+}
+
+.cart--item .ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer):focus-within .ant-select-selector {
+    border-color: var(--red) !important;
+    box-shadow: none;
+}
+
+.cart--item .ant-select,
+.cart--item .ant-select-single .ant-select-selector {
+    color: var(--grey);
+}
+
+.ant-popconfirm-buttons .ant-btn-primary,
+.ant-modal-footer .ant-btn-primary {
+    background-color: var(--red) !important;
+}

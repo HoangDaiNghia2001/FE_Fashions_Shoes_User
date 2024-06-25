@@ -21,7 +21,7 @@ const Account = (props) => {
     return <div className="account min-h-[calc(100vh-80px)] py-10 bg-honeydew flex justify-center items-center">
         <Spin tip="Loading..." spinning={account.isLoading} size='large'>
             <div className='w-[1000px] min-h-[500px] bg-white px-7 py-5 rounded-[8px]'>
-                <AccountHeader />
+                <AccountHeader code={user.code} />
                 <div className='flex justify-between items-start relative w-full mb-4'>
                     <AccountInformation imageFile={imageFile} openNotification={props.openNotification} />
                     <AccountImage imageFile={imageFile} setImageFile={setImageFile} />

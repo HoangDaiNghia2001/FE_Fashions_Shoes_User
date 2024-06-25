@@ -5,7 +5,6 @@ import { APP_URLS } from "constants/variable"
 import { Formik, Form } from "formik"
 import { createCartItemAsync } from "page/User/CartDetail/CartSlice"
 import { filter } from "page/User/ShopNow/ShopNowSlice"
-import { useEffect } from "react"
 import { useRef, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -35,7 +34,6 @@ const ProductModal = (props) => {
     const formProduct = useRef()
 
     //size
-    const [listSizes, setListSizes] = useState([])
     const [checked, setChecked] = useState()
 
     const handleCancel = () => {
@@ -79,10 +77,15 @@ const ProductModal = (props) => {
 
     }
 
-    useEffect(() => {
-        setListSizes(product.sizes.slice().sort((a, b) => { return a.name - b.name }))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const availableSizes = product.sizes
+        .slice()
+        .sort((a, b) => { return a.name - b.name })
+        .filter(item => item.quantity !== 0)
+        .map(item => ({
+            id: item.id,
+            value: item.name,
+            label: item.name
+        }));
 
     return <Modal
         open={isModalOpen}
@@ -130,17 +133,25 @@ const ProductModal = (props) => {
                             return <Form>
                                 <InputField name='productId' display={true} />
                                 <InputField name='quantity' display={true} />
-                                <p className='font-bold text-eclipse text-[16px] mb-4 tracking-[0.75px]'>Select size:</p>
-                                <RadioButtonField name='size' options={listSizes.map((item) => {
-                                    return {
-                                        id: item.id,
-                                        value: item.name,
-                                        label: item.name
-                                    }
-                                })} checked={checked} setChecked={setChecked} hidden='hidden' />
-                                <div className='text-center mt-6'>
-                                    <button className='button-custom py-[6px] px-8' type='submit'>Add to cart</button>
-                                </div>
+                                {availableSizes.length !== 0 ? (
+                                    <>
+                                        <p className='font-bold text-eclipse text-[16px] mb-4 tracking-[0.75px]'>Select size:</p>
+                                        <RadioButtonField
+                                            name='size'
+                                            options={availableSizes}
+                                            checked={checked}
+                                            setChecked={setChecked}
+                                            hidden='hidden'
+                                        />
+                                        <div className='text-center mt-6'>
+                                            <button className='button-custom py-[6px] px-8' type='submit'>Add to cart</button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-center">
+                                        <button onClick={handleCancel} className="button-custom py-[6px] px-[50px] text-[16px]">Sold out</button>
+                                    </div>
+                                )}
                             </Form>
                         }
                     }

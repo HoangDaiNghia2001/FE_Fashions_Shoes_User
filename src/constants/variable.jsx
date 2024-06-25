@@ -1,5 +1,5 @@
-// export const BASE_URL = 'http://localhost:8080'
-export const BASE_URL = 'https://backendfashionshoes-production.up.railway.app'
+export const BASE_URL = 'http://localhost:8080'
+// export const BASE_URL = 'https://backendfashionshoes-production.up.railway.app'
 
 // role
 export const ROLE_USER = 'USER';
@@ -82,7 +82,7 @@ export const LIST_CHECKOUT = [
 export const PAYMENT_METHOD = {
     COD: 'COD',
     VNPAY: 'VNPAY',
-    MOMO: 'MOMO'
+    PAYPAL: 'PAYPAL'
 }
 
 export const STATUS_ORDER = {

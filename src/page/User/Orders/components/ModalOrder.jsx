@@ -19,10 +19,10 @@ const ModalOrder = (props) => {
 
     const getProvinces = async () => {
         const response = await dispatch(getProvinceAsync())
-        setProvinces(response.payload.map((item) => {
+        setProvinces(response.payload.data.map((item) => {
             return {
-                value: item.code,
-                label: item.name
+                value: item.ProvinceID,
+                label: item.ProvinceName
             }
         }))
     }
@@ -30,10 +30,10 @@ const ModalOrder = (props) => {
     const getDistrictByProvince = async (value) => {
         if (value) {
             const response = await dispatch(getDistrictByProvinceAsync(value))
-            setDistricts(response.payload.districts?.map((item) => {
+            setDistricts(response.payload.data?.map((item) => {
                 return {
-                    value: item.code,
-                    label: item.name
+                    value: item.DistrictID,
+                    label: item.DistrictName
                 }
             }))
         }
@@ -42,10 +42,11 @@ const ModalOrder = (props) => {
     const getWardByDistrict = async (value) => {
         if (value) {
             const response = await dispatch(getWardByDistrictAsync(value))
-            setWards(response.payload.wards?.map((item) => {
+            console.log(response)
+            setWards(response.payload.data?.map((item) => {
                 return {
-                    value: item.code,
-                    label: item.name
+                    value: item.WardCode,
+                    label: item.WardName
                 }
             }))
         }

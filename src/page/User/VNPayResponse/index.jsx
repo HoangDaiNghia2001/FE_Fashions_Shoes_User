@@ -45,8 +45,9 @@ const VNPayResponse = (props) => {
 
     return <Spin tip="Loading" size="large" spinning={order.isLoading}>
         <div className="vnpay-response min-h-[calc(100vh-80px)] flex bg-white">
-            <div className='border-[1px] border-light-gray p-10 rounded-[8px] m-auto mt-[100px]'>
-                <p className='text-eclipse text-[32px] font-semibold tracking-[2px] mb-3 text-center'>VNPAY</p>
+            <div className={`absolute top-0 right-0 left-0 bottom-0`}></div>
+            <div className='border-[1px] border-light-gray p-10 rounded-[16px] m-auto mt-[100px] bg-white z-10 shadow-[0px_0px_20px_10px_rgba(255,255,255,0.7)]'>
+                <p className='text-eclipse text-[32px] font-semibold tracking-[2px] mb-3 text-center'>VnPay Information</p>
                 <div className="text-eclipse mb-1 flex text-[18px]">
                     <p className="min-w-[160px] font-semibold">Payment date: </p>
                     <span>{ConvertDateHaveHour(vnPay?.vnp_PayDate)}</span>
@@ -61,7 +62,7 @@ const VNPayResponse = (props) => {
                 </div>
                 <div className="text-eclipse mb-1 flex text-[18px]">
                     <p className="min-w-[160px] font-semibold">Total price: </p>
-                    <span>{vnPay?.vnp_Amount?.toLocaleString()}<sup>vnđ</sup></span>
+                    <span className="text-red-custom font-semibold">{vnPay?.vnp_Amount?.toLocaleString()}<sup>vnđ</sup></span>
                 </div>
                 <div className="text-eclipse mb-1 flex text-[18px]">
                     <p className="min-w-[160px] font-semibold">Payment content: </p>

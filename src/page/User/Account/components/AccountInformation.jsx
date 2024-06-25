@@ -68,53 +68,53 @@ const AccountInformation = (props) => {
         setWards([])
     };
 
-    const getProvince = async () => {
+    const getProvinces = async () => {
         const response = await dispatch(getProvinceAsync())
-        setProvinces(response.payload.map((item) => {
+        setProvinces(response.payload.data.map((item) => {
             return {
-                value: item.code,
-                label: item.name
+                value: item.ProvinceID,
+                label: item.ProvinceName
             }
         }))
     }
 
+    const getDistrictByProvince = async (value) => {
+        if (value) {
+            const response = await dispatch(getDistrictByProvinceAsync(value))
+            setDistricts(response.payload.data?.map((item) => {
+                return {
+                    value: item.DistrictID,
+                    label: item.DistrictName
+                }
+            }))
+        }
+    }
+
+    const getWardByDistrict = async (value) => {
+        if (value) {
+            const response = await dispatch(getWardByDistrictAsync(value))
+            console.log(response)
+            setWards(response.payload.data?.map((item) => {
+                return {
+                    value: item.WardCode,
+                    label: item.WardName
+                }
+            }))
+        }
+    }
+
     useEffect(() => {
-        getProvince()
+        getProvinces()
         getDistrictByProvince(provinceCode)
         getWardByDistrict(districtCode)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    // get District
-    const getDistrictByProvince = async (value) => {
-        if (value) {
-            const response = await dispatch(getDistrictByProvinceAsync(value))
-            setDistricts(response.payload.districts?.map((item) => {
-                return {
-                    value: item.code,
-                    label: item.name
-                }
-            }))
-        }
-    }
     useEffect(() => {
         getDistrictByProvince(provinceCode)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceCode])
 
-
-    // get Ward
-    const getWardByDistrict = async (value) => {
-        if (value) {
-            const response = await dispatch(getWardByDistrictAsync(value))
-            setWards(response.payload.wards?.map((item) => {
-                return {
-                    value: item.code,
-                    label: item.name
-                }
-            }))
-        }
-    }
     useEffect(() => {
         getWardByDistrict(districtCode)
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -124,7 +124,8 @@ const AccountInformation = (props) => {
 
         <Formik
             initialValues={{
-                ...user, createAt: ConvertDate(user.createAt)
+                ...user,
+                createAt: ConvertDate(user.createAt)
             }}
             onSubmit={handleSave}
             validationSchema={validation}>

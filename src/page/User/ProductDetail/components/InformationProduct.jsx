@@ -21,12 +21,14 @@ const InformationProduct = (props) => {
         await dispatch(filter({ brandId: product.brandProduct.id }))
     }
 
+    const [lowQuantity, setLowquantity] = useState(0)
+
     // form
     const [formProductDetail] = useForm();
 
     const handleAddToCart = async (values) => {
         const user = JSON.parse(localStorage.getItem("user"))
-
+        console.log(values)
         if (user === null) {
             navigate(APP_URLS.URL_LOGIN)
         } else {
@@ -75,7 +77,9 @@ const InformationProduct = (props) => {
     ];
 
     useEffect(() => {
-        setListSizes(product.sizes.slice().sort(function (a, b) { return a.name - b.name; }))
+        setListSizes(product.sizes
+            .slice()
+            .sort((a, b) => { return a.name - b.name }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -128,36 +132,54 @@ const InformationProduct = (props) => {
                 <Input />
             </Form.Item>
 
-            <div className='mb-5'>
-                <p className='font-bold text-eclipse text-[18.5px] mb-3 tracking-[0.5px]'>Select size:</p>
-                <Form.Item
-                    name="size"
-                    className='form--size__item product-detail--size'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please choose your size!',
-                        },
-                    ]}
-                    style={{
-                        marginBottom: 35
-                    }}
-                >
-                    <Radio.Group>
-                        {
-                            listSizes.map((item, index) => item.quantity > 0 && <Radio.Button key={index} value={item.name}>{item.name}</Radio.Button>)
-                        }
-                    </Radio.Group>
-                </Form.Item>
-            </div>
+            {
+                listSizes.length !== 0 && <>
+                    <div className='mb-2'>
+                        <p className='font-bold text-eclipse text-[18.5px] mb-3 tracking-[0.5px]'>Select size:</p>
+                        <Form.Item
+                            name="size"
+                            className='form--size__item product-detail--size'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please choose your size!',
+                                },
+                            ]}
+                            style={{
+                                marginBottom: 10
+                            }}
+                        >
+                            <Radio.Group>
+                                {
+                                    listSizes.map((item, index) =>
+                                        <Radio.Button
+                                            key={index}
+                                            value={item.name}
+                                            disabled={item.quantity === 0 ? true : false}
+                                            onClick={() => { item.quantity < 10 ? setLowquantity(item.quantity) : setLowquantity(0) }}>
+                                            {item.name}
+                                        </Radio.Button>)
+                                }
+                            </Radio.Group>
+                        </Form.Item>
+                        <p className={`${lowQuantity !== 0 ? 'opacity-100' : 'opacity-0'} text-red-custom mt-1`}>Only {lowQuantity} products left in stock</p>
+                    </div>
 
-            <div className='text-center mb-10'>
-                <Form.Item>
-                    <button className='button-custom text-[16.5px] py-2 px-12' type='submit'>Add to cart</button>
-                </Form.Item>
-            </div>
+                    <div className='text-center mb-10'>
+                        <Form.Item>
+                            <button className='button-custom text-[16.5px] py-2 px-12' type='submit'>Add to cart</button>
+                        </Form.Item>
+                    </div>
+                </>
+            }
         </Form>
 
+        {
+            listSizes.length === 0 &&
+            <div className="text-center mb-10">
+                <button onClick={() => { handleNavigateShopNow(); navigate(APP_URLS.URL_SHOP_NOW) }} className="button-custom py-[8px] px-[70px] text-[18px]">Sold out</button>
+            </div>
+        }
         <Collapse
             bordered={false}
             items={getItems()}

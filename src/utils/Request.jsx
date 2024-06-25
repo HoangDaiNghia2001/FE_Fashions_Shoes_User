@@ -15,13 +15,11 @@ const handleError = async (error) => {
     const { response = {}, config } = error;
     const { data, status, statusText } = response;
     const originalRequest = config
-    if (data.message === 'Access Denied'
-        && data.status === 403
-        && data.error === 'Forbidden'
-        && !originalRequest._retry) {
+    if ((data.status === 403 && data.error === 'Forbidden' && !originalRequest._retry) ||
+        (status === 500 && !originalRequest._retry)) {
         originalRequest._retry = true;
         const res = await refreshTokenService()
-        console.log(res)
+        console.log(res.data.message)
         if (res.data.status === 500 || !res.data.success) {
             console.log(res.data.message)
             localStorage.removeItem("user")

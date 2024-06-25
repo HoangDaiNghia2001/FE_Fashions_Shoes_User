@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { getOrderIdNewestService, placeOrderCODService, placeOrderVNPayService } from "service/CheckOutService"
+import { getOrderIdNewestService, placeOrderCODService, placeOrderPayPalService, placeOrderVNPayService } from "service/CheckOutService"
 
 const initialState = {
     isLoading: false,
@@ -18,6 +18,12 @@ export const placeOrderCODAsync = createAsyncThunk("placeOrderCOD", async (param
 // place order VNPay
 export const placeOrderVNPayAsync = createAsyncThunk("placeOrderVNPay", async (params) => {
     const response = await placeOrderVNPayService(params)
+    return response.data
+})
+
+// place order PayPal
+export const placeOrderPayPalAsync = createAsyncThunk("placeOrderPayPal", async (params) => {
+    const response = await placeOrderPayPalService(params)
     return response.data
 })
 
@@ -50,11 +56,20 @@ export const checkout = createSlice({
                 state.placeOrder = action.payload
             })
 
-            //place order COD
+            //place order VNPay
             .addCase(placeOrderVNPayAsync.pending, (state) => {
                 state.isLoading = true
             })
             .addCase(placeOrderVNPayAsync.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.placeOrder = action.payload
+            })
+
+            //place order PayPal
+            .addCase(placeOrderPayPalAsync.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(placeOrderPayPalAsync.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.placeOrder = action.payload
             })

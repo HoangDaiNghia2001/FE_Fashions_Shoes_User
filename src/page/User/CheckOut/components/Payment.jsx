@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { TotalPrice } from 'utils/TotalPrice';
-import { checkOutSelector, getOrderIdNewestAsync, notifiCheckOutSuccess, placeOrderCODAsync, placeOrderVNPayAsync } from '../CheckOutSlice';
+import { checkOutSelector, getOrderIdNewestAsync, notifiCheckOutSuccess, placeOrderCODAsync, placeOrderPayPalAsync, placeOrderVNPayAsync } from '../CheckOutSlice';
 import TableProductCheckOut from './TableProductCheckOut';
 
 const Payment = (props) => {
@@ -31,9 +31,7 @@ const Payment = (props) => {
     };
 
     const handlePlaceOrder = async () => {
-
         let response;
-
         const infor = {
             ...shipping, ...{
                 fullName: shipping.lastName + ' ' + shipping.firstName,
@@ -81,7 +79,26 @@ const Payment = (props) => {
                     openNotification(vnPay.payload.message, 'error')
                 }
                 break;
+            //PAYPAL
+            case PAYMENT_METHOD.PAYPAL:
+                response = await dispatch(placeOrderCODAsync({ ...infor, productQuantities: productQuantities }))
 
+                const order = await dispatch(getOrderIdNewestAsync())
+
+                const total = cart.listCartItemsCheckout.reduce((total, current) => total + current.totalPrice, 0)
+
+                const paypal = await dispatch(placeOrderPayPalAsync({
+                    total: TotalPrice(total),
+                    orderId: order.payload
+                }))
+
+                if(paypal.payload.success){
+                    window.location.href = paypal.payload.results;
+                }else {
+                    openNotification(paypal.payload.message, 'error')
+                }
+
+                break;
             default:
                 break;
         }
@@ -102,7 +119,7 @@ const Payment = (props) => {
                             <Radio.Group className='font-bold tracking-[0.75px]' onChange={onChange} value={paymentMethod}>
                                 <Radio value={PAYMENT_METHOD.COD}>COD</Radio>
                                 <Radio value={PAYMENT_METHOD.VNPAY}>VNPay</Radio>
-                                <Radio value={PAYMENT_METHOD.MOMO}>Momo</Radio>
+                                <Radio value={PAYMENT_METHOD.PAYPAL}>PayPal</Radio>
                             </Radio.Group>
 
                             <div className={`payment-content mt-3 ${paymentMethod === PAYMENT_METHOD.VNPAY && 'show'}`}>

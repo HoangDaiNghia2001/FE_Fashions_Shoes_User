@@ -44,7 +44,7 @@ const OrderItem = (props) => {
             ...order,
             province: +order.province,
             district: +order.district,
-            ward: +order.ward
+            ward: order.ward
         })
         setIsModalOrderOpen(true)
     }
@@ -59,15 +59,15 @@ const OrderItem = (props) => {
 
     const getAddress = async (value) => {
         const responseProvince = await dispatch(getProvinceAsync())
-        const province = responseProvince.payload.filter(province => province.code === +value.province)
+        const province = responseProvince.payload.data.filter(province => province.ProvinceID === +value.province)
 
         const responseDistrict = await dispatch(getDistrictByProvinceAsync(value.province))
-        const district = responseDistrict.payload.districts.filter(district => district.code === +value.district)
+        const district = responseDistrict.payload.data.filter(district => district.DistrictID === +value.district)
 
         const responseWard = await dispatch(getWardByDistrictAsync(value.district))
-        const ward = responseWard.payload.wards.filter(ward => ward.code === +value.ward)
+        const ward = responseWard.payload.data.filter(ward => ward.WardCode === value.ward)
 
-        setAddress(order.address + ', ' + ward[0].name + ', ' + district[0].name + ', ' + province[0].name)
+        setAddress(order.address + ', ' + ward[0].WardName + ', ' + district[0].DistrictName + ', ' + province[0].ProvinceName)
 
     }
 
@@ -77,7 +77,7 @@ const OrderItem = (props) => {
     }, [order]);
 
     return <div className='w-[1000px] bg-white px-10 py-5 rounded-[8px] border border-light-gray mb-8'>
-        <p className='text-[25px] text-eclipse uppercase font-semibold tracking-[1px] mb-3'>My Order</p>
+        <p className='text-[25px] text-red-custom uppercase font-semibold tracking-[1px] mb-3' title="Order code">{order.code}</p>
         <div className='flex justify-between'>
             <div className='w-[68%]'>
                 <div className='order--item flex mb-2'>

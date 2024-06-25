@@ -16,6 +16,13 @@ export const placeOrderVNPayService = (params) => {
     })
 }
 
+// place order PayPal
+export const placeOrderPayPalService = (params) => {
+    return request(`/api/user/place/order/PayPal?${queryString.stringify(params)}`, {
+        method: 'POST'
+    })
+}
+
 // get order id newest
 export const getOrderIdNewestService = () => {
     return request('/api/user/order/newest', {

@@ -56,10 +56,10 @@ const Shipping = (props) => {
 
     const getProvince = async () => {
         const response = await dispatch(getProvinceAsync())
-        setProvinces(response.payload.map((item) => {
+        setProvinces(response.payload.data.map((item) => {
             return {
-                value: item.code,
-                label: item.name
+                value: item.ProvinceID,
+                label: item.ProvinceName
             }
         }))
     }
@@ -67,10 +67,10 @@ const Shipping = (props) => {
     const getDistrictByProvince = async (value) => {
         if (value) {
             const response = await dispatch(getDistrictByProvinceAsync(value))
-            setDistricts(response.payload.districts?.map((item) => {
+            setDistricts(response.payload.data?.map((item) => {
                 return {
-                    value: item.code,
-                    label: item.name
+                    value: item.DistrictID,
+                    label: item.DistrictName
                 }
             }))
         }
@@ -79,10 +79,10 @@ const Shipping = (props) => {
     const getWardByDistrict = async (value) => {
         if (value) {
             const response = await dispatch(getWardByDistrictAsync(value))
-            setWards(response.payload.wards?.map((item) => {
+            setWards(response.payload.data?.map((item) => {
                 return {
-                    value: item.code,
-                    label: item.name
+                    value: item.WardCode,
+                    label: item.WardName
                 }
             }))
         }

@@ -19,6 +19,7 @@ const FormCartItem = (props) => {
         if (response.payload.success) {
             openNotification(response.payload.message, 'success')
         } else {
+            console.log(cart)
             openNotification(response.payload.message, 'error')
         }
     }
@@ -63,7 +64,7 @@ const FormCartItem = (props) => {
                     width: 60,
                 }}
                 onChange={handleUpdateCartItem}
-                options={listSizes.map((item) => {
+                options={listSizes.filter(item => item.quantity !== 0).map((item) => {
                     return {
                         value: item.name,
                         label: item.name

@@ -10,7 +10,7 @@ const InputPasswordField = (props) => {
     const [hidePassword, setHidePassword] = useState(true)
 
     return <div className="input-field mb-3">
-        {title && <TitleItem title={title} />}
+        {title && <TitleItem title={title} required={props.required} />}
 
         <div className="relative">
             <Field id={name} name={name} autoFocus={autoFocus} type={hidePassword ? 'password' : 'text'} {...rest} />

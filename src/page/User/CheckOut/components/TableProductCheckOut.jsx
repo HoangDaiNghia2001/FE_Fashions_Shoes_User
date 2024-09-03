@@ -2,7 +2,7 @@ import { APP_URLS, ORDER_FREESHIP } from "constants/variable"
 import { getDetailProductAsync } from "page/User/ProductDetail/ProductSlice"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { Capitelize } from "utils/Capitalize"
+import { Capitalize } from "utils/Capitalize"
 import { CheckFeeShipping } from "utils/CheckFeeShipping"
 import { TotalPrice } from "utils/TotalPrice"
 
@@ -30,17 +30,17 @@ const TableProductCheckOut = (props) => {
                 listCartItemsCheckout.map((item, index) => <tr className="overflow-hidden" key={index}>
                     <td className="flex overflow-hidden items-center">
                         <img
-                            onClick={() => handelNavigatePageDetail(item.idProduct)}
+                            onClick={() => handelNavigatePageDetail(item.product.id)}
                             className="object-center object-cover w-[100px] h-[100px] rounded-[8px] mr-3 border border-light-gray cursor-pointer"
-                            src={item.mainImageBase64}
+                            src={item.product.mainImageBase64}
                             alt="" />
                         <div className="w-[calc(100%-140px)]">
                             <div className="flex text-[16.5px] text-eclipse">
                                 <p
-                                    onClick={() => handelNavigatePageDetail(item.idProduct)}
+                                    onClick={() => handelNavigatePageDetail(item.product.id)}
                                     className='tracking-[0.75px] max-w-[90%] overflow-hidden truncate cursor-pointer'
                                 >
-                                    {Capitelize(item.nameProduct.split(' ')).toString().replaceAll(',', ' ')}
+                                    {Capitalize(item.product.name.split(' ')).toString().replaceAll(',', ' ')}
                                 </p>
                                 <span className="text-red-custom mx-2">x</span>
                                 <p className='font-bold text-red-custom' title='Quantity'>{item.quantity}</p>

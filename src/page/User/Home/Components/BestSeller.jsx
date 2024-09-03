@@ -18,11 +18,12 @@ const BestSeller = (props) => {
 
     const getListProductsBestSeller = async () => {
         const response = await dispatch(getListProsductsBestSellerAsync())
-
-        setProductsBestSeller({
-            data: response.payload.results.listProducts,
-            visible: 4
-        })
+        if (response.payload.success) {
+            setProductsBestSeller({
+                data: response.payload.results.listProducts,
+                visible: 4
+            })
+        }
     }
 
     const handleLoadmore = () => {
@@ -41,7 +42,7 @@ const BestSeller = (props) => {
 
     return <div className="best-seller pb-5">
         <SectionHeading title='Best Seller' />
-        <div className="flex justify-between overflow-hidden flex-wrap">
+        <div className="grid grid-cols-4 gap-3">
             {
                 productsBestSeller.data.slice(0, productsBestSeller.visible).map((item, index) => <ProductItem key={index} className='card-product__medium'
                     discountedPercent={item.discountedPercent} discountedPrice={item.discountedPrice} name={item.name} title={item.title} product={item} />)

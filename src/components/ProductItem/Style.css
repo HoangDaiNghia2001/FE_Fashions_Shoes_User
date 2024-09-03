@@ -1,12 +1,12 @@
 .card-product__max {
-    width: 32.5%;
-    height: 420px;
+    /* width: 32.5%; */
+    height: 400px;
 
 }
 
 .card-product__medium {
-    width: 24.2%;
-    height: 400px;
+    /* width: 24.2%; */
+    height: 380px;
 }
 
 .card-product__actions {

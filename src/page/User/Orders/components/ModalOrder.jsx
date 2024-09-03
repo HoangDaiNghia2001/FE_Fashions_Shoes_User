@@ -89,7 +89,7 @@ const ModalOrder = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isModalOrderOpen])
     return <Modal
-        title={"Update Order"}
+        title={"Update Order: " + order.code}
         width={700}
         open={isModalOrderOpen}
         onCancel={handleCancelModalOrder}
@@ -150,7 +150,7 @@ const ModalOrder = (props) => {
 
                     <Form.Item
                         label={<p className="text-eclipse text-[16.5px] tracking-[0.75px] font-semibold">Alrternate Phone</p>}
-                        name="alternatePhone"
+                        name="alternatePhoneNumber"
                         style={{
                             width: '49%',
                             marginBottom: 10
@@ -242,7 +242,7 @@ const ModalOrder = (props) => {
                 </div>
 
                 <Form.Item
-                    name="notes"
+                    name="note"
                     label={<p className="text-eclipse text-[16.5px] font-semibold tracking-[0.75px]">Notes</p>}
                     style={{
                         width: '100%',

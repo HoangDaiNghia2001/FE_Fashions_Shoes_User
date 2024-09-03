@@ -1,4 +1,4 @@
-import { Popconfirm } from "antd"
+import { Empty, Popconfirm } from "antd"
 import { useForm } from "antd/es/form/Form"
 import { APP_URLS, STATUS_ORDER } from "constants/variable"
 import { getDistrictByProvinceAsync, getProvinceAsync, getWardByDistrictAsync } from "page/User/Account/AccountSlice"
@@ -7,7 +7,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { Capitelize } from "utils/Capitalize"
+import { Capitalize } from "utils/Capitalize"
 import { ConvertDateHaveHour } from "utils/ConvertDateHaveHour"
 import { cancelOrdersAsync } from "../OrderSlice"
 import ModalOrder from "./ModalOrder"
@@ -90,11 +90,11 @@ const OrderItem = (props) => {
                 </div>
                 <div className='order--item flex mb-2'>
                     <p>Alternate phone: </p>
-                    <p>{order.alternatePhone}</p>
+                    <p>{order.alternatePhoneNumber}</p>
                 </div>
                 <div className='order--item flex mb-2'>
                     <p>Notes:</p>
-                    <p className='truncate' title='a'>{order.notes !== '' ? order.notes : '...'}</p>
+                    <p className='truncate' title={order.note}>{order.note !== '' ? order.note : '...'}</p>
                 </div>
                 <div className='order--item flex mb-2'>
                     <p>Address:</p>
@@ -120,57 +120,62 @@ const OrderItem = (props) => {
                 </div>
                 <div className='order--item-custom flex mb-2 justify-between'>
                     <p>Order status:</p>
-                    <p className='text-red-custom font-bold'>{order.statusOrder}</p>
+                    <p className='text-red-custom font-bold'>{order.status}</p>
                 </div>
             </div>
         </div>
 
         <table className="table-product-checkout border-collapse my-5 w-full border border-light-gray text-eclipse">
-            <tbody>
-                {
-                    order.orderLines.map((item, index) => <tr className="overflow-hidden" key={index}>
-                        <td className="flex overflow-hidden items-center">
-                            <img
-                                onClick={() => handelNavigatePageDetail(item.productId)}
-                                className="object-center object-cover w-[100px] h-[100px] rounded-[8px] mr-3 border border-light-gray cursor-pointer"
-                                src={item.mainImageBase64}
-                                alt="" />
-                            <div className="w-[calc(100%-140px)]">
-                                <div className="flex text-[16.5px] text-eclipse">
-                                    <p
-                                        onClick={() => handelNavigatePageDetail(item.productId)}
-                                        className='tracking-[0.75px] max-w-[90%] overflow-hidden truncate cursor-pointer'
-                                    >
-                                        {Capitelize(item.nameProduct.split(' ')).toString().replaceAll(',', ' ')}
+            {
+                order.orderLines.length !== 0 ? <tbody>
+                    {
+                        order.orderLines.map((item, index) => <tr className="overflow-hidden" key={index}>
+                            <td className="flex overflow-hidden items-center">
+                                <img
+                                    onClick={() => handelNavigatePageDetail(item.productId)}
+                                    className="object-center object-cover w-[100px] h-[100px] rounded-[8px] mr-3 border border-light-gray cursor-pointer"
+                                    src={item.mainImageBase64}
+                                    alt="" />
+                                <div className="w-[calc(100%-140px)]">
+                                    <div className="flex text-[16.5px] text-eclipse">
+                                        <p
+                                            onClick={() => handelNavigatePageDetail(item.productId)}
+                                            className='tracking-[0.75px] max-w-[90%] overflow-hidden truncate cursor-pointer'
+                                        >
+                                            {Capitalize(item.nameProduct.split(' ')).toString().replaceAll(',', ' ')}
+                                        </p>
+                                        <span className="text-red-custom mx-2">x</span>
+                                        <p className='font-bold text-red-custom' title='Quantity'>{item.quantity}</p>
+                                    </div>
+                                    <p className="text-[14px] text-grey mt-1 tracking-[0.5px]">
+                                        Brand: {Capitalize(item.brand.split(' ')).toString().replaceAll(',', ' ')} - Size: {item.size}
                                     </p>
-                                    <span className="text-red-custom mx-2">x</span>
-                                    <p className='font-bold text-red-custom' title='Quantity'>{item.quantity}</p>
                                 </div>
-                                <p className="text-[14px] text-grey mt-1 tracking-[0.5px]">
-                                    Brand: {Capitelize(item.brand.split(' ')).toString().replaceAll(',', ' ')} - Size: {item.size}
-                                </p>
-                            </div>
-                        </td>
-                        <td className='text-[16px] text-right'>{item.totalPrice.toLocaleString()}<sup>đ</sup></td>
-                    </tr>)
-                }
-                <tr className='text-[16px] font-semibold'>
-                    <td className='tracking-[1.25px]'>Fee shipping</td>
-                    <td className='text-red-custom text-right'>{order.transportFee !== 0 ? (<>{order.transportFee.toLocaleString()}<sup>đ</sup></>) : 'Free'}</td>
-                </tr>
-                <tr className='text-[16px] font-semibold'>
-                    <td className='tracking-[1.25px]'>Subtoal</td>
-                    <td className='text-red-custom text-right'>{order.totalPrice.toLocaleString()}<sup>đ</sup></td>
-                </tr>
-                <tr className='text-[16px] font-semibold'>
-                    <td className='tracking-[1.25px]'>Pay</td>
-                    <td className='text-red-custom text-right'>{order.pay}</td>
-                </tr>
-            </tbody>
+                            </td>
+                            <td className='text-[16px] text-right'>{item.totalPrice.toLocaleString()}<sup>đ</sup></td>
+                        </tr>)
+                    }
+                    <tr className='text-[16px] font-semibold'>
+                        <td className='tracking-[1.25px]'>Fee shipping</td>
+                        <td className='text-red-custom text-right'>{order.transportFee !== 0 ? (<>{order.transportFee.toLocaleString()}<sup>đ</sup></>) : 'Free'}</td>
+                    </tr>
+                    <tr className='text-[16px] font-semibold'>
+                        <td className='tracking-[1.25px]'>Subtoal</td>
+                        <td className='text-red-custom text-right'>{order.totalPrice.toLocaleString()}<sup>đ</sup></td>
+                    </tr>
+                    <tr className='text-[16px] font-semibold'>
+                        <td className='tracking-[1.25px]'>Pay</td>
+                        <td className='text-red-custom text-right'>{order.pay}</td>
+                    </tr>
+                </tbody>
+                    :
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            }
+
         </table>
         <div className='text-right'>
             {
-                (order.statusOrder === STATUS_ORDER.PENDING && order.pay !== 'PAID') &&
+                (order.status === STATUS_ORDER.PENDING && order.pay !== 'PAID') &&
                 <Popconfirm
                     title="Delete the task"
                     description="Are you sure cancel this order?"
@@ -183,7 +188,7 @@ const OrderItem = (props) => {
             }
 
             {
-                (order.statusOrder !== STATUS_ORDER.DELIVERED) &&
+                (order.status === STATUS_ORDER.PENDING) &&
                 <button className='button-custom px-5 py-2 text-[12px] ml-2' onClick={handleOpenModalOrder}>Update order</button>
             }
         </div>

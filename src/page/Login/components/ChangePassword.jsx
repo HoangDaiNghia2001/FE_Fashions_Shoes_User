@@ -69,9 +69,9 @@ const ChangePassword = (props) => {
             {
                 fromikProps => {
                     return <Form>
-                        <InputPasswordField title='Old password' name='oldPassword' autoFocus={true} />
-                        <InputPasswordField title='New password' name='newPassword' />
-                        <InputPasswordField title='Repeat password' name='repeatNewPassword' />
+                        <InputPasswordField title='Old password' name='oldPassword' autoFocus={true} required={true} />
+                        <InputPasswordField title='New password' name='newPassword' required={true} />
+                        <InputPasswordField title='Repeat password' name='repeatNewPassword' required={true} />
                         <div className="mt-6">
                             <Button name='Submit' />
                         </div>

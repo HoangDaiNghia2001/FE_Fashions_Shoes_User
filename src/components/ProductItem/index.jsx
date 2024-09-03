@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Capitelize } from 'utils/Capitalize';
+import { Capitalize } from 'utils/Capitalize';
 import './Style.css'
 import { APP_URLS } from 'constants/variable';
 import ProductModal from './components/ProductModal';
@@ -27,7 +27,7 @@ const ProductItem = (props) => {
         navigate(`${APP_URLS.URL_PRODUCT}/${product.id}`)
     }
 
-    return <div className={`card-product ${className} overflow-hidden p-3 border-[1px] border-solid border-zinc-200 mb-4 rounded-md relative`}>
+    return <div className={`card-product ${className} overflow-hidden p-3 border-[1px] border-solid border-zinc-200 rounded-md relative`}>
         <div onClick={handleNavigatePageDetail} to={`${APP_URLS.URL_PRODUCT}/${product.id}`} className='h-full w-full cursor-pointer'>
             {
                 product.discountedPercent > 0 &&
@@ -39,10 +39,10 @@ const ProductItem = (props) => {
             <div className="text-center mt-2">
                 <p className="text-zinc-600 font-bold uppercase tracking-[1px] text-[12px]">{product.brandProduct.name}</p>
 
-                <p className="tracking-[1px] font-extrabold text-eclipse mb-[2px] " title={Capitelize(product.name.trim().split(' ')).toString().replaceAll(',', ' ')}>
-                    {product.name.trim().split(' ').length > 4 ? Capitelize(product.name.trim().split(' ')).slice(0, 4).toString().replaceAll(',', ' ') + ' ...'
+                <p className="tracking-[1px] font-extrabold text-eclipse mb-[2px] " title={Capitalize(product.name.trim().split(' ')).toString().replaceAll(',', ' ')}>
+                    {product.name.trim().split(' ').length > 4 ? Capitalize(product.name.trim().split(' ')).slice(0, 4).toString().replaceAll(',', ' ') + ' ...'
                         :
-                        Capitelize(product.name.trim().split(' ')).toString().replaceAll(',', ' ')}
+                        Capitalize(product.name.trim().split(' ')).toString().replaceAll(',', ' ')}
                 </p>
                 {
                     product.discountedPercent > 0 ?

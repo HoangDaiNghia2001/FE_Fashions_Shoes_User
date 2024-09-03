@@ -1,6 +1,6 @@
 import { filterProductsService, getBrandsService, getChildCategoryByParentCategoryService, getHighestPriceOfProductService, getParentCategoryByBrandService } from "service/ShopNowService"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { Capitelize } from "utils/Capitalize"
+import { Capitalize } from "utils/Capitalize"
 
 const initialState = {
     filter: {
@@ -80,10 +80,10 @@ const shopNow = createSlice({
             })
             .addCase(getBrandsAsync.fulfilled, (state, action) => {
                 state.isLoading = false
-                state.listBrands = [{ value: undefined, label: 'All brands' }, ...action.payload.map((item) => {
+                state.listBrands = [{ value: undefined, label: 'All brands' }, ...action.payload.results.map((item) => {
                     return {
                         value: item.id,
-                        label: Capitelize(item.name.split(' ')).toString().replaceAll(',', ' ')
+                        label: Capitalize(item.name.split(' ')).toString().replaceAll(',', ' ')
                     }
                 })]
             })
@@ -95,10 +95,10 @@ const shopNow = createSlice({
             })
             .addCase(getParentCategoryByBrandAsync.fulfilled, (state, action) => {
                 state.isLoading = false
-                state.listParentCategory = action.payload.map((item) => {
+                state.listParentCategory = action.payload.results.map((item) => {
                     return {
                         value: item.id,
-                        label: Capitelize(item.name.split(' ')).toString().replaceAll(',', ' ')
+                        label: Capitalize(item.name.split(' ')).toString().replaceAll(',', ' ')
                     }
                 })
             })
@@ -109,10 +109,10 @@ const shopNow = createSlice({
             })
             .addCase(getChildCategoryByParentCategoryAsync.fulfilled, (state, action) => {
                 state.isLoading = false
-                state.listChildCategory = action.payload.map((item) => {
+                state.listChildCategory = action.payload.results.map((item) => {
                     return {
                         value: item.id,
-                        label: Capitelize(item.name.split(' ')).toString().replaceAll(',', ' ')
+                        label: Capitalize(item.name.split(' ')).toString().replaceAll(',', ' ')
                     }
                 })
             })

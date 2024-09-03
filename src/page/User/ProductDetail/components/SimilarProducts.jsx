@@ -23,7 +23,9 @@ const SimilarProduct = (props) => {
 
     const getSimilarProducts = async (values) => {
         const response = await dispatch(getSimilarProductsAsync(values))
-        setListSimilarProducts({ data: response.payload.results.listProducts, visible: 4 })
+        if (response.payload.success) {
+            setListSimilarProducts({ data: response.payload.results.listProducts, visible: 4 })
+        }
     }
 
     const handleLoadMore = () => {
@@ -45,7 +47,7 @@ const SimilarProduct = (props) => {
 
     return <div className='similar-products mt-5 mb-16'>
         <SectionHeading title='Similar Product' />
-        <div className="flex justify-between overflow-hidden flex-wrap">
+        <div className="grid grid-cols-4 gap-3">
             {
                 listSimilarProducts.data.slice(0, listSimilarProducts.visible).map((item, index) => <ProductItem key={index} className='card-product__medium' product={item} />)
             }

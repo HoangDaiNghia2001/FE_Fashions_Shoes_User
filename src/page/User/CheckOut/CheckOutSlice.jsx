@@ -37,7 +37,7 @@ export const checkout = createSlice({
     name: 'checkoutSlice',
     initialState,
     reducers: {
-        notifiCheckOutSuccess: (state, action) => {
+        notifyCheckOutSuccess: (state, action) => {
             state.messageSuccess = action.payload
         },
         saveOrderRequest: (state, action) => {
@@ -84,7 +84,7 @@ export const checkout = createSlice({
     }
 })
 
-export const { notifiCheckOutSuccess, saveOrderRequest } = checkout.actions
+export const { notifyCheckOutSuccess, saveOrderRequest } = checkout.actions
 
 export const checkOutSelector = state => state.checkout
 

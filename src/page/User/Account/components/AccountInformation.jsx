@@ -21,6 +21,8 @@ const AccountInformation = (props) => {
 
     const user = JSON.parse(localStorage.getItem("user"))
 
+    console.log(user.createdAt);
+
     const handleSave = async (values) => {
         const userRequest = { ...values, ...{ avatarBase64: props.imageFile } }
 
@@ -40,6 +42,7 @@ const AccountInformation = (props) => {
         email: Yup.string().required('Please input your email !!!')
             .email('Invalid email format !!!'),
         mobile: Yup.string().required('Please input your mobile !!!'),
+        gender: Yup.string().required('Please input your gender !!!'),
     })
 
     const GetValues = () => {
@@ -70,6 +73,7 @@ const AccountInformation = (props) => {
 
     const getProvinces = async () => {
         const response = await dispatch(getProvinceAsync())
+
         setProvinces(response.payload.data.map((item) => {
             return {
                 value: item.ProvinceID,
@@ -125,7 +129,7 @@ const AccountInformation = (props) => {
         <Formik
             initialValues={{
                 ...user,
-                createAt: ConvertDate(user.createAt)
+                createdAt: ConvertDate(user.createdAt)
             }}
             onSubmit={handleSave}
             validationSchema={validation}>
@@ -134,7 +138,7 @@ const AccountInformation = (props) => {
                     return <Form>
                         <div className="flex justify-between items-center">
                             <div className="w-[48.5%]">
-                                <InputField title='Create At' type='text' name='createAt' disabled disable={true} />
+                                <InputField title='Create At' type='text' name='createdAt' disabled disable={true} />
                             </div>
                             <div className="w-[48.5%]">
                                 <InputField title='Email' type='text' name='email' disabled disable={true} />
@@ -143,19 +147,19 @@ const AccountInformation = (props) => {
 
                         <div className="flex justify-between items-center">
                             <div className="w-[48.5%]">
-                                <InputField title='First Name' type='text' name='firstName' />
+                                <InputField title='First Name' type='text' name='firstName' required={true} />
                             </div>
                             <div className="w-[48.5%]">
-                                <InputField title='Last Name' type='text' name='lastName' />
+                                <InputField title='Last Name' type='text' name='lastName' required={true} />
                             </div>
                         </div>
 
                         <div className="flex justify-between items-center">
                             <div className="w-[48.5%]">
-                                <InputField title='Mobile' type='text' name='mobile' />
+                                <InputField title='Mobile' type='text' name='mobile' required={true} />
                             </div>
                             <div className="w-[48.5%]">
-                                <SelectField title='Gender' name='gender' options={LIST_GENDER} placeholder='Select your gender' />
+                                <SelectField title='Gender' name='gender' options={LIST_GENDER} placeholder='Select your gender' required={true} />
                             </div>
                         </div>
 

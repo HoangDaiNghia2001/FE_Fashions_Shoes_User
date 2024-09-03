@@ -1,5 +1,6 @@
 import { Form, Input, Select } from "antd"
 import { useForm } from "antd/es/form/Form"
+import { QUANTITY_OPTIONS } from "constants/variable"
 import { updateCartItemAsync } from "page/User/CartDetail/CartSlice"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
@@ -19,16 +20,15 @@ const FormCartItem = (props) => {
         if (response.payload.success) {
             openNotification(response.payload.message, 'success')
         } else {
-            console.log(cart)
             openNotification(response.payload.message, 'error')
         }
     }
 
     useEffect(() => {
-        setListSizes(cart.sizeProduct.slice().sort((a, b) => { return a.name - b.name }))
+        setListSizes(cart.product.sizes.slice().sort((a, b) => { return a.name - b.name }))
         formCartUpdate.setFieldsValue({
             ...cart,
-            productId: cart.idProduct,
+            productId: cart.product.id,
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cart])
@@ -64,13 +64,20 @@ const FormCartItem = (props) => {
                     width: 60,
                 }}
                 onChange={handleUpdateCartItem}
-                options={listSizes.filter(item => item.quantity !== 0).map((item) => {
-                    return {
+                options={listSizes.map((item) => {
+                    let size = {};
+                    if (item.quantity === 0) {
+                        size.disabled = true
+                    }
+                    size = {
+                        ...size,
                         value: item.name,
                         label: item.name
                     }
+                    return size;
                 })}
                 className='cart--item--size'
+                disabled={cart.outOffStock}
             />
         </Form.Item>
 
@@ -83,42 +90,15 @@ const FormCartItem = (props) => {
                     width: 60,
                 }}
                 onChange={handleUpdateCartItem}
-                options={[
-                    {
-                        value: 1,
-                        label: '1',
-                    },
-                    {
-                        value: 2,
-                        label: '2',
-                    },
-                    {
-                        value: 3,
-                        label: '3',
-                    },
-                    {
-                        value: 4,
-                        label: '4',
-                    }, {
-                        value: 5,
-                        label: '5',
-                    }, {
-                        value: 6,
-                        label: '6',
-                    }, {
-                        value: 7,
-                        label: '7',
-                    }, {
-                        value: 8,
-                        label: '8',
-                    }, {
-                        value: 9,
-                        label: '9',
-                    }, {
-                        value: 10,
-                        label: '10',
-                    },
-                ]}
+                options={QUANTITY_OPTIONS.map(quantity => {
+                    const sizeSelected = cart.product.sizes.find(size => size.name === cart.size)
+                    const newQuantity = { ...quantity }
+                    if (sizeSelected && sizeSelected.quantity < quantity.value) {
+                        newQuantity.disabled = true;
+                    }
+                    return newQuantity
+                })}
+                disabled={cart.outOffStock}
             />
         </Form.Item>
     </Form>

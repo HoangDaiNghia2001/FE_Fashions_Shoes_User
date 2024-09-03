@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { TabTitle } from 'utils/TabTitle'
-import { checkOutSelector, notifiCheckOutSuccess } from '../CheckOut/CheckOutSlice'
+import { checkOutSelector, notifyCheckOutSuccess } from '../CheckOut/CheckOutSlice'
 import FormSearchOrder from './components/FormSearchOrder'
 import OrderItem from './components/OrderItem'
 import { getOrdersAsync, orderSelector } from './OrderSlice'
@@ -27,10 +27,9 @@ const Orders = (props) => {
 
     const getAllOrders = async (params) => {
         const response = await (dispatch(getOrdersAsync(params)))
-        console.log(response)
         if (response.payload.success) {
             setOrders({
-                data: response.payload.results,
+                data: response.payload.results.listOrders,
                 visible: 5
             })
         }
@@ -49,22 +48,14 @@ const Orders = (props) => {
         window.scrollTo(0, 0)
     }
 
-
-
     useEffect(() => {
         TabTitle('My orders')
         window.scrollTo(0, 0)
         if (checkout.messageSuccess !== '') {
             openNotification(checkout.messageSuccess, 'success')
-            dispatch(notifiCheckOutSuccess(''))
+            dispatch(notifyCheckOutSuccess(''))
         }
         getAllOrders(valueFilter)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    useEffect(() => {
-        getAllOrders(valueFilter)
-        window.scrollTo(0, 0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [valueFilter, order.orderItem])
 

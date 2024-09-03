@@ -7,7 +7,7 @@ const SelectField = (props) => {
     const { name, title, options, placeholder, ...rest } = props
 
     return <div className="select-field mb-3">
-        {title && <TitleItem title={title} />}
+        {title && <TitleItem title={title} required={props.required} />}
         <Field as='select' id={name} name={name} {...rest} >
             <option value='' disabled>{placeholder}</option>
             {

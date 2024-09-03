@@ -7,7 +7,7 @@ import './Style.css'
 import { APP_URLS } from "constants/variable"
 import { TabTitle } from "utils/TabTitle"
 import { useDispatch, useSelector } from "react-redux"
-import { cartSelector, deleteCartItemAsync, getCartDetailAsync, saveListCartItemsChoosed, updateCartItemAsync } from "./CartSlice"
+import { cartSelector, getCartDetailAsync, getSizesOfProductAsync, saveListCartItemsChoosed } from "./CartSlice"
 import { Modal, Spin } from "antd"
 import ProductAlsoLike from "./components/ProductsAlsoLike"
 import { ExclamationCircleFilled } from "@ant-design/icons"
@@ -35,13 +35,26 @@ const CartDetail = (props) => {
             openNotification('Please select the product you want to purchase.', 'warning')
         } else {
             let checkout = true;
-            listCartItemChoose.forEach((item) => {
-                item.sizeProduct.forEach((size) => {
-                    if (size.name === item.size && size.quantity < item.quantity) {
-                        checkout = false;
+            for (const item of listCartItemChoose) {
+                const sizes = await dispatch(getSizesOfProductAsync(item.product.id))
+
+                if (sizes.payload.success) {
+                    const size = sizes.payload.results.find(s => s.name === item.size)
+                    if (size) {
+                        if (size.quantity < item.quantity || size.quantity === 0) {
+                            checkout = false
+                            break
+                        }
+                    } else {
+                        checkout = false
+                        break
                     }
-                })
-            })
+                } else {
+                    checkout = false
+                    break
+                }
+            }
+
             if (checkout) {
                 await dispatch(saveListCartItemsChoosed(listCartItemChoose))
                 navigate(APP_URLS.URL_CHECKOUT)
@@ -51,49 +64,29 @@ const CartDetail = (props) => {
         }
     }
 
-    const handleOk = async () => {
-        let response;
-        for (const item of listCartItem.data) {
-            for (const size of item.sizeProduct) {
-                if (size.name === item.size) {
-                    if (size.quantity < item.quantity && size.quantity !== 0) {
-                        response = await dispatch(updateCartItemAsync({
-                            id: item.id,
-                            productId: item.idProduct,
-                            size: item.size,
-                            quantity: size.quantity
-                        }));
-                        if (!response.payload.success) {
-                            openNotification(response.payload.message, 'success');
-                            setIsModalOpen(false);
-                            break;
-                        }
-                    } else if (size.quantity === 0) {
-                        response = await dispatch(deleteCartItemAsync(item.id));
-                        if (!response.payload.success) {
-                            openNotification(response.payload.message, 'success');
-                            setIsModalOpen(false);
-                            break;
-                        }
-                    }
-                }
-            }
+    const handleReload = async () => {
+        const response = await dispatch(getCartDetailAsync())
+        if (response.payload.success) {
+            setListCartItem({
+                data: response.payload.results.listCartItems,
+                visible: 5
+            })
+            openNotification("Update your cart success. Now you can continue shopping!!!", 'success');
+        } else {
+            openNotification("Update your cart failed. Please reload your website!!!", 'error');
         }
         setIsModalOpen(false)
-        openNotification("Update your cart success.Now you can continue shopping!!!", 'success');
-        setListCartItemChoose([])
-    };
-
-    const handleCancel = () => {
-        setIsModalOpen(false)
-    };
+        setCheckedList([])
+    }
 
     const getCartDetail = async () => {
         const response = await (dispatch(getCartDetailAsync()))
-        setListCartItem({
-            data: response.payload.listCartItems,
-            visible: 5
-        })
+        if (response.payload.success) {
+            setListCartItem({
+                data: response.payload.results.listCartItems,
+                visible: 5
+            })
+        }
     }
 
     useEffect(() => {
@@ -131,16 +124,12 @@ const CartDetail = (props) => {
             width={500}
         >
             <div>
-                <p className='text-eclipse text-[16px] ml-7 mt-[-6px]'>In your order, some products have incorrect quantities or are out of stock. Please click <span className="font-bold">OK</span> to reload your cart.</p>
+                <p className='text-eclipse text-[16px] ml-7 mt-[-6px]'>In your order, some products have incorrect quantities or are out of stock. Please click <span className="font-bold">Reload</span> to reload your cart.</p>
                 <div className='text-right mt-3'>
                     <button
-                        onClick={() => handleCancel()}
-                        className='px-[10px] py-1 text-grey border border-light-gray rounded-[4px] mr-1 duration-150 ease-linear font-bold hover:text-red-custom hover:border-red-custom'
-                    >Cancel</button>
-                    <button
-                        onClick={() => handleOk()}
+                        onClick={() => handleReload()}
                         className='px-4 py-1 bg-red-custom border border-red-custom rounded-[4px] ml-1 text-white duration-150 ease-linear font-bold hover:opacity-70'
-                    >Ok</button>
+                    >Reload</button>
                 </div>
             </div>
         </Modal>

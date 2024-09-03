@@ -40,7 +40,7 @@ export const product = createSlice({
             .addCase(getDetailProductAsync.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.loadInfor = true
-                state.productInfor = action.payload
+                state.productInfor = action.payload.results
             })
 
             // get similar product

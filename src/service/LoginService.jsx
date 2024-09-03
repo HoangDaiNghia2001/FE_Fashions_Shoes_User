@@ -11,7 +11,7 @@ export const userLoginService = (params) => {
 
 // call api refresh token
 export const refreshTokenService = () => {
-    return request('/api/refresh/token/user', {
+    return request('/api/token/user/refresh', {
         method: 'POST'
     })
 }

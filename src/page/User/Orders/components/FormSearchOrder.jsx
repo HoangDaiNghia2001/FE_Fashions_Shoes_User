@@ -1,4 +1,4 @@
-import { DatePicker, Form, Select } from "antd"
+import { DatePicker, Form, Input, Select } from "antd"
 import { useForm } from "antd/es/form/Form";
 import { LIST_ORDER_STATUS, LIST_PAYMENT_METHOD } from "constants/variable"
 const { RangePicker } = DatePicker;
@@ -12,21 +12,21 @@ const FormSearchOrder = (props) => {
     const onFinish = (values) => {
         let orderDateStart;
         let orderDateEnd;
-        if (values.orderDate !== undefined) {
+        if (values.orderDate) {
             orderDateStart = values.orderDate[0]?.format("YYYY-MM-DD HH:MM:ss")
             orderDateEnd = values.orderDate[1]?.format("YYYY-MM-DD HH:MM:ss")
         }
 
         let deliveryDateStart;
         let deliveryDateEnd;
-        if (values.deliveryDate !== undefined) {
+        if (values.deliveryDate) {
             deliveryDateStart = values.deliveryDate[0]?.format("YYYY-MM-DD HH:MM:ss")
             deliveryDateEnd = values.deliveryDate[1]?.format("YYYY-MM-DD HH:MM:ss")
         }
 
         let receivingDateStart;
         let receivingDateEnd;
-        if (values.receivingDate !== undefined) {
+        if (values.receivingDate) {
             receivingDateStart = values.receivingDate[0]?.format("YYYY-MM-DD HH:MM:ss")
             receivingDateEnd = values.receivingDate[1]?.format("YYYY-MM-DD HH:MM:ss")
         }
@@ -43,13 +43,15 @@ const FormSearchOrder = (props) => {
             receivingDateStart: receivingDateStart,
             receivingDateEnd: receivingDateEnd,
         })
+
+        console.log(orderDateStart, orderDateEnd)
     }
 
     const onReset = () => {
         setValueFilter({})
     }
 
-    return <div className="w-[25%] py-3 px-4 bg-white border sticky top-[85px] h-[460px] border-light-gray rounded-[8px]">
+    return <div className="w-[25%] py-3 px-4 bg-white border sticky top-[85px] h-[524px] border-light-gray rounded-[8px]">
         <p className='text-[20px] uppercase text-black font-semibold tracking-[1.2px] mb-3'>
             Total
             <span className="text-red-custom font-bold">({orders.data.length})</span>
@@ -63,6 +65,16 @@ const FormSearchOrder = (props) => {
             autoComplete="off"
             layout="vertical"
         >
+            <Form.Item
+                label={<p className="text-eclipse text-[16px] tracking-[0.75px] font-semibold">Order code</p>}
+                name="orderCode"
+                style={{
+                    marginBottom: 10
+                }}
+            >
+                <Input />
+            </Form.Item>
+
             <div className="flex justify-between">
                 <Form.Item
                     label={<p className="text-eclipse text-[16px] tracking-[0.75px] font-semibold">Order status</p>}

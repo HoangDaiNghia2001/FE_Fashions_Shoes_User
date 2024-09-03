@@ -8,7 +8,7 @@ import { filter } from "page/User/ShopNow/ShopNowSlice"
 import { useRef, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { Capitelize } from "utils/Capitalize"
+import { Capitalize } from "utils/Capitalize"
 import * as Yup from 'yup'
 
 const ProductModal = (props) => {
@@ -101,11 +101,11 @@ const ProductModal = (props) => {
                 <p className='font-semibold text-[16px] mb-3 text-eclipse tracking-[0.75px]'>Brand: <span onClick={handleNavigateShopNow} className='text-red-custom uppercase cursor-pointer duration-100 ease-linear hover:text-blue-700'>{product.brandProduct.name}</span></p>
                 <p
                     className='whitespace-nowrap truncate text-[28.5px] font-bold text-eclipse tracking-[0.75px]'
-                    title={Capitelize(product.name.trim().split(' ')).toString().replaceAll(',', ' ')}
+                    title={Capitalize(product.name.trim().split(' ')).toString().replaceAll(',', ' ')}
                 >
-                    {Capitelize(product.name.split(' ')).toString().replaceAll(',', ' ')}
+                    {Capitalize(product.name.split(' ')).toString().replaceAll(',', ' ')}
                 </p>
-                <p className='text-[16.5px] font-bold text-eclipse tracking-[0.75px] mt-[-2px] mb-3'>{Capitelize(product.title.split(' ')).toString().replaceAll(',', ' ')}</p>
+                <p className='text-[16.5px] font-bold text-eclipse tracking-[0.75px] mt-[-2px] mb-3'>{Capitalize(product.title.split(' ')).toString().replaceAll(',', ' ')}</p>
                 {
                     product.discountedPercent > 0 ? <div className="flex items-center justify-start text-[21.5px] mb-2">
                         <p className="mr-2 text-red-custom font-semibold tracking-wider">{product.discountedPrice.toLocaleString()}<sup>đ</sup></p>

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { addCartItemService, countCartItemService, deleteCartItemService, deleteMultiCartItemService, getCartDetailService, getProductsAlsoLikeService, updateCartItemService } from "service/CartService"
+import { getSizesOfProductService } from "service/ProductService"
 
 const initialState = {
     isLoading: false,
@@ -50,6 +51,12 @@ export const deleteMultiCartItemAsync = createAsyncThunk("deleteMultiCartItem", 
 // get products also like
 export const getProductsAlsoLikeAsync = createAsyncThunk("getProductsAlsoLike", async () => {
     const response = await getProductsAlsoLikeService()
+    return response.data
+})
+
+// get sizes of product
+export const getSizesOfProductAsync = createAsyncThunk("getSizesOfProduct", async (param) => {
+    const response = await getSizesOfProductService(param)
     return response.data
 })
 
@@ -124,6 +131,14 @@ const cart = createSlice({
             .addCase(getProductsAlsoLikeAsync.fulfilled, (state, action) => {
                 state.isLoadListProducts = false
                 state.listproductsAlsoLike = action.payload
+            })
+
+            // get sizes of products
+            .addCase(getSizesOfProductAsync.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(getSizesOfProductAsync.fulfilled, (state, action) => {
+                state.isLoading = false
             })
     }
 })

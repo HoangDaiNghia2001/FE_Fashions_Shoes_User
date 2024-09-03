@@ -19,12 +19,14 @@ const ProductAlsoLike = () => {
         visible: 4
     })
 
-    const getProductsAlosLike = async () => {
+    const getProductsAlsoLike = async () => {
         const response = await dispatch(getProductsAlsoLikeAsync())
-        setListProductsAlsoLike({
-            data: response.payload.results.listProducts,
-            visible: 4
-        })
+        if (response.payload.success) {
+            setListProductsAlsoLike({
+                data: response.payload.results.listProducts,
+                visible: 4
+            })
+        }
     }
 
     const handleLoadMore = () => {
@@ -36,13 +38,13 @@ const ProductAlsoLike = () => {
         navigate(APP_URLS.URL_SHOP_NOW)
     }
     useEffect(() => {
-        getProductsAlosLike()
+        getProductsAlsoLike()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return <div className="product-also-like mb-12">
         <SectionHeading title='You might also like' />
-        <div className="flex justify-between overflow-hidden flex-wrap">
+        <div className="grid grid-cols-4 gap-3">
             {
                 listProductsAlsoLike.data.slice(0, listProductsAlsoLike.visible).map((item, index) => <ProductItem key={index} className='card-product__medium' product={item} />)
             }

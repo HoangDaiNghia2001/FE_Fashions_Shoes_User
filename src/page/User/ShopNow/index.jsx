@@ -29,7 +29,7 @@ const ShopNow = () => {
         await dispatch(getBrandsAsync())
     }
 
-    const getPrantCategoryByBrand = async (brandId) => {
+    const getParentCategoryByBrand = async (brandId) => {
         await dispatch(getParentCategoryByBrandAsync({ brandId: brandId }))
     }
 
@@ -80,8 +80,8 @@ const ShopNow = () => {
 
     // gọi lại khi thay đổi brand
     useEffect(() => {
-        if (shopNow.filter.brandId !== undefined) {
-            getPrantCategoryByBrand(shopNow.filter.brandId)
+        if (shopNow.filter.brandId) {
+            getParentCategoryByBrand(shopNow.filter.brandId)
         } else {
             dispatch(resetListParentCategory())
             dispatch(resetLisChildCategory())
@@ -91,7 +91,7 @@ const ShopNow = () => {
 
     // gọi lại khi thay đổi parent category
     useEffect(() => {
-        if (shopNow.filter.brandId !== undefined && shopNow.filter.parentCategoryId !== undefined) {
+        if (shopNow.filter.brandId && shopNow.filter.parentCategoryId) {
             getChildCategoryByParentCategory(shopNow.filter.parentCategoryId)
         } else {
             dispatch(resetLisChildCategory())

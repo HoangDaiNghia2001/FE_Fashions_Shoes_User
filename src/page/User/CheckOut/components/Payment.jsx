@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { TotalPrice } from 'utils/TotalPrice';
-import { checkOutSelector, getOrderIdNewestAsync, notifiCheckOutSuccess, placeOrderCODAsync, placeOrderPayPalAsync, placeOrderVNPayAsync } from '../CheckOutSlice';
+import { checkOutSelector, getOrderIdNewestAsync, notifyCheckOutSuccess, placeOrderCODAsync, placeOrderPayPalAsync, placeOrderVNPayAsync } from '../CheckOutSlice';
 import TableProductCheckOut from './TableProductCheckOut';
 
 const Payment = (props) => {
@@ -39,9 +39,9 @@ const Payment = (props) => {
                 transportFee: subTotal > ORDER_FREESHIP ? 0 : FEE_SHIPPING
             }
         }
-        const productQuantities = cart.listCartItemsCheckout.map((item) => {
+        const orderLineRequests = cart.listCartItemsCheckout.map((item) => {
             return {
-                productId: item.idProduct,
+                productId: item.product.id,
                 size: item.size,
                 quantity: item.quantity,
                 totalPrice: item.totalPrice
@@ -49,55 +49,70 @@ const Payment = (props) => {
         })
 
         switch (paymentMethod) {
-
             // COD
             case PAYMENT_METHOD.COD:
-                response = await dispatch(placeOrderCODAsync({ ...infor, productQuantities: productQuantities }))
+                response = await dispatch(placeOrderCODAsync({ ...infor, orderLineRequests: orderLineRequests }))
                 if (response.payload.success) {
-                    await dispatch(notifiCheckOutSuccess('You have placed your order successfully !!!'))
+                    await dispatch(notifyCheckOutSuccess('You have placed your order successfully !!!'))
                     navigate(APP_URLS.URL_ORDERS)
+                } else {
+                    openNotification(response.payload.message, 'error')
                 }
                 break;
 
             // VNPAY
             case PAYMENT_METHOD.VNPAY:
-                response = await dispatch(placeOrderCODAsync({ ...infor, productQuantities: productQuantities }))
+                response = await dispatch(placeOrderCODAsync({ ...infor, orderLineRequests: orderLineRequests }))
+                if (response.payload.success) {
+                    const totalPrice = cart.listCartItemsCheckout.reduce((total, current) => total + current.totalPrice, 0)
 
-                const orderNewest = await dispatch(getOrderIdNewestAsync())
+                    const orderNewest = await dispatch(getOrderIdNewestAsync())
 
-                const totalPrice = cart.listCartItemsCheckout.reduce((total, current) => total + current.totalPrice, 0)
+                    if (orderNewest.payload.success) {
+                        const vnPay = await dispatch(placeOrderVNPayAsync({
+                            totalPrice: TotalPrice(totalPrice),
+                            orderInfo: paymentContent,
+                            orderId: orderNewest.payload.results
+                        }))
 
-                const vnPay = await dispatch(placeOrderVNPayAsync({
-                    totalPrice: TotalPrice(totalPrice),
-                    orderInfo: paymentContent,
-                    orderId: orderNewest.payload
-                }))
-
-                if (vnPay.payload.success) {
-                    window.location.href = vnPay.payload.results
+                        if (vnPay.payload.success) {
+                            window.location.href = vnPay.payload.results
+                        } else {
+                            openNotification(vnPay.payload.message, 'error')
+                        }
+                    } else {
+                        openNotification(orderNewest.payload.message, 'error')
+                    }
                 } else {
-                    openNotification(vnPay.payload.message, 'error')
+                    openNotification(response.payload.message, 'error')
                 }
                 break;
+
             //PAYPAL
             case PAYMENT_METHOD.PAYPAL:
-                response = await dispatch(placeOrderCODAsync({ ...infor, productQuantities: productQuantities }))
+                response = await dispatch(placeOrderCODAsync({ ...infor, orderLineRequests: orderLineRequests }))
+                if (response.payload.success) {
+                    const total = cart.listCartItemsCheckout.reduce((total, current) => total + current.totalPrice, 0)
 
-                const order = await dispatch(getOrderIdNewestAsync())
+                    const order = await dispatch(getOrderIdNewestAsync())
 
-                const total = cart.listCartItemsCheckout.reduce((total, current) => total + current.totalPrice, 0)
+                    if (order.payload.success) {
+                        const paypal = await dispatch(placeOrderPayPalAsync({
+                            total: TotalPrice(total),
+                            orderId: order.payload.results
+                        }))
 
-                const paypal = await dispatch(placeOrderPayPalAsync({
-                    total: TotalPrice(total),
-                    orderId: order.payload
-                }))
-
-                if(paypal.payload.success){
-                    window.location.href = paypal.payload.results;
-                }else {
-                    openNotification(paypal.payload.message, 'error')
+                        if (paypal.payload.success) {
+                            window.location.href = paypal.payload.results;
+                        } else {
+                            openNotification(paypal.payload.message, 'error')
+                        }
+                    } else {
+                        openNotification(order.payload.message, 'error')
+                    }
+                } else {
+                    openNotification(response.payload.message, 'error')
                 }
-
                 break;
             default:
                 break;

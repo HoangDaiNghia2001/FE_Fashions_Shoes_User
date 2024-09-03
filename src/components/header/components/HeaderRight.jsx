@@ -39,7 +39,6 @@ const HeaderRight = (props) => {
     const handleOk = async () => {
         const response = await dispatch(logoutAsync())
         if (response.payload.success) {
-            console.log(response.payload.message)
             localStorage.removeItem("user")
             navigate(APP_URLS.URL_HOME)
         }
@@ -101,7 +100,7 @@ const HeaderRight = (props) => {
             countCartItem()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cart.cartItem, checkout.placeOrder])
+    }, [cart.cartItem, cart.listCartDetail, checkout.placeOrder])
 
     useEffect(() => {
         if (shopNow.filter.name === undefined) {
@@ -113,7 +112,7 @@ const HeaderRight = (props) => {
         <div className='flex justify-between items-center h-10 header--right'>
             <Formik
                 initialValues={{
-                    name: shopNow.filter.name !== undefined ? shopNow.filter.name : ''
+                    name: shopNow.filter.name ? shopNow.filter.name : ''
                 }}
                 onSubmit={onSearch}
                 innerRef={formSearch}

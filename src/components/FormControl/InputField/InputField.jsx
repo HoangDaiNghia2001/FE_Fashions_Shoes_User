@@ -7,7 +7,7 @@ const InputField = (props) => {
     const { title, name, display, autoFocus, disable, ...rest } = props
 
     return <div className={`input-field mb-3 ${display && 'hidden'} ${disable && 'disable'}`}>
-        {title && <TitleItem title={title} />}
+        {title && <TitleItem title={title} required={props.required} />}
         <FastField id={name} name={name} autoFocus={autoFocus} {...rest} />
         <ErrorMessage name={name} component={TextError} />
     </div>

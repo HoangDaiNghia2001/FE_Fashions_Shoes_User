@@ -35,16 +35,7 @@ const LoginForm = (props) => {
             navigate(APP_URLS.URL_SHOP_NOW)
         }
         else {
-            switch (response.payload.status) {
-                case 500:
-                    props.openNotification("Invalid Password", 'error')
-                    break
-                case 403:
-                    props.openNotification('User not found !!!', 'error')
-                    break
-                default:
-                    props.openNotification("Error System", 'error')
-            }
+            props.openNotification(response.payload.message, 'error')
         }
     }
 
@@ -82,9 +73,9 @@ const LoginForm = (props) => {
             {
                 formikProps => {
                     return <Form>
-                        <InputField title='Email' name='email' type='email' autoFocus={true} />
+                        <InputField title='Email' name='email' type='email' autoFocus={true} required={true} />
 
-                        <InputPasswordField title='Password' name='password' />
+                        <InputPasswordField title='Password' name='password' required={true} />
 
                         <div className='text-right text-[14px]'>
                             <Link to='/forgot-password' className='text-eclipse font-semibold tracking-[0.5px] hover:text-red-custom ease-in-out duration-150'>Forgot Password?</Link>

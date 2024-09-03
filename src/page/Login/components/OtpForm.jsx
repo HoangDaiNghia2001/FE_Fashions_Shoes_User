@@ -73,7 +73,7 @@ const OtpForm = (props) => {
             {
                 formikProps => {
                     return <Form>
-                        <InputField name='otp' type='text' title='One-time Password' autoFocus={true} />
+                        <InputField name='otp' type='text' title='One-time Password' autoFocus={true} required={true} />
                         <div className='mt-5'>
                             <Button name='Submit' />
                         </div>

@@ -8,6 +8,13 @@ export const getDetailProductService = (id) => {
     })
 }
 
+// get sizes of product
+export const getSizesOfProductService = (id) => {
+    return request(`/api/product/sizes?id=${id}`, {
+        method: 'GET'
+    })
+}
+
 // get similar products
 export const getSimilarProductsService = (params) => {
     return request(`/api/products/similar?${queryString.stringify(params)}`, {

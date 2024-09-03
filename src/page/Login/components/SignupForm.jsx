@@ -163,19 +163,19 @@ const SignupForm = (props) => {
                 (formikProps) => {
 
                     return <Form>
-                        <InputField name='firstName' title='First Name' type='text' autoFocus={true} />
+                        <InputField name='firstName' title='First Name' type='text' autoFocus={true} required={true} />
 
-                        <InputField name='lastName' title='Last Name' type='text' />
+                        <InputField name='lastName' title='Last Name' type='text' required={true} />
 
-                        <InputField name='email' title='Email' type='email' />
+                        <InputField name='email' title='Email' type='email' required={true} />
 
                         <div className='flex justify-between'>
                             <div className='w-[49%]'>
-                                <InputField name='mobile' title='Mobile' type='text' />
+                                <InputField name='mobile' title='Mobile' type='text' required={true} />
                             </div>
 
                             <div className='w-[49%]'>
-                                <SelectField name='gender' title='Gender' options={LIST_GENDER} placeholder='Select your gender' />
+                                <SelectField name='gender' title='Gender' options={LIST_GENDER} placeholder='Select your gender' required={true} />
                             </div>
                         </div>
 
@@ -211,9 +211,9 @@ const SignupForm = (props) => {
                             </div>
                         </div>
 
-                        <InputPasswordField name='password' title='Password' />
+                        <InputPasswordField name='password' title='Password' required={true} />
 
-                        <InputPasswordField name='repeatPassword' title='Repeat password' />
+                        <InputPasswordField name='repeatPassword' title='Repeat password' required={true} />
 
                         <div className='mt-8'>
                             <Button name='Sign up' />

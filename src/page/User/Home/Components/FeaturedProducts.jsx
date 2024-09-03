@@ -18,10 +18,12 @@ const FeaturedProducts = (props) => {
 
     const getListProductsFeatured = async () => {
         const response = await dispatch(getListProsductsFeaturedAsync())
-        setProductsFeatures({
-            data: response.payload.results.listProducts,
-            visible: 4
-        })
+        if (response.payload.success) {
+            setProductsFeatures({
+                data: response.payload.results.listProducts,
+                visible: 4
+            })
+        }
     }
 
     const handleLoadmore = () => {
@@ -40,7 +42,7 @@ const FeaturedProducts = (props) => {
 
     return <div className="featured-products pb-12 pt-7">
         <SectionHeading title='Featured products' />
-        <div className="flex justify-between overflow-hidden flex-wrap">
+        <div className="grid grid-cols-4 gap-3">
             {
                 productsFeatured.data.slice(0, productsFeatured.visible).map((item, index) => <ProductItem className='card-product__medium' key={index} product={item} />)
             }

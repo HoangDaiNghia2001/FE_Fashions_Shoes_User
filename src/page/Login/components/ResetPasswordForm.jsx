@@ -79,9 +79,9 @@ const ResetPasswordForm = (props) => {
             {
                 fromikProps => {
                     return <Form>
-                        <InputPasswordField name='password' title='Password' autoFocus={true} />
+                        <InputPasswordField name='password' title='Password' autoFocus={true} required={true} />
 
-                        <InputPasswordField name='repeatPassword' title='Repeat Password' />
+                        <InputPasswordField name='repeatPassword' title='Repeat Password' required={true} />
 
                         <div className='mt-5'>
                             <Button name='Reset Password' />

@@ -77,9 +77,11 @@ const Bag = (props) => {
     }
 
     return <div className="w-[60%]">
-        <p className="text-eclipse font-semibold text-[32px] tracking-[2px]">Cart ({listCartItem.data.length})</p>
+        <p className="text-eclipse font-semibold text-[32px] tracking-[2px]">Cart ({listCartItem?.data.length})</p>
         {
-            listCartItem.data.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='There are no items in your bag.' /> :
+            listCartItem?.data.length === 0 ?
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='There are no items in your cart.' />
+                :
                 <>
                     <div className="flex justify-between items-center mt-4 mb-2">
                         <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
@@ -102,7 +104,7 @@ const Bag = (props) => {
                     </div>
                     {
                         listCartItem.data.slice(0, listCartItem.visible).map((item, index) => <div key={index} className="flex w-full">
-                            <Checkbox onChange={() => handleChoose(item.id)} value={item.id} checked={isCheckedItem(item.id)} ></Checkbox>
+                            <Checkbox onChange={() => handleChoose(item.id)} value={item.id} checked={isCheckedItem(item.id)} className={`${item.outOffStock ? 'opacity-0' : ''}`}></Checkbox>
                             <CartItem cart={item} openNotification={openNotification} checkDeleteMulti={checkDeleteMulti} setCheckedList={setCheckedList} />
                         </div>)
                     }
@@ -116,7 +118,6 @@ const Bag = (props) => {
                     </div>
                 </>
         }
-
     </div>
 }
 

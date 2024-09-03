@@ -22,7 +22,7 @@ const VNPayResponse = (props) => {
     const [vnPay, setVnPay] = useState({})
 
     const orderInfor = (str) => {
-        if (str !== undefined) {
+        if (str) {
             const orderInfor = str.split("-")
 
             return orderInfor.slice(0, orderInfor.length - 1)

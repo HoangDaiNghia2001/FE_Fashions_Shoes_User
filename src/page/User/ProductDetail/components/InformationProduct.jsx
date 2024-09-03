@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
 import { Form, Radio, Input, Collapse } from 'antd';
 import { useForm } from "antd/es/form/Form";
-import { Capitelize } from "utils/Capitalize";
+import { Capitalize } from "utils/Capitalize";
 import { APP_URLS } from "constants/variable";
 import { useDispatch } from "react-redux";
 import { filter } from "page/User/ShopNow/ShopNowSlice";
@@ -28,7 +28,6 @@ const InformationProduct = (props) => {
 
     const handleAddToCart = async (values) => {
         const user = JSON.parse(localStorage.getItem("user"))
-        console.log(values)
         if (user === null) {
             navigate(APP_URLS.URL_LOGIN)
         } else {
@@ -85,7 +84,7 @@ const InformationProduct = (props) => {
 
     return <div className="w-[44%]">
         <p className="text-[18.5px] text-eclipse tracking-[0.75px] font-semibold mb-2">Brand: <Link to={APP_URLS.URL_SHOP_NOW} onClick={handleNavigateShopNow} className='text-red-custom uppercase hover:text-[#69b1ff] duration-300 ease-in-out'>{product.brandProduct?.name}</Link></p>
-        <p className="text-[33.5px] font-semibold tracking-[2px] text-eclipse mb-2">{Capitelize(product.name.split(' ')).toString().replaceAll(',', ' ')}</p>
+        <p className="text-[33.5px] font-semibold tracking-[2px] text-eclipse mb-2">{Capitalize(product.name.split(' ')).toString().replaceAll(',', ' ')}</p>
         {
             product.discountedPercent > 0 ? <div className="flex items-center justify-start text-[22.5px] mb-2">
                 <p className="mr-2 text-red-custom font-semibold tracking-wider">{product.discountedPrice.toLocaleString()}<sup>đ</sup></p>
@@ -100,10 +99,10 @@ const InformationProduct = (props) => {
         <div className="product-information">
             <p>Desciption: <span>{product.description}</span></p>
             <p>Category:
-                <span> {Capitelize(product.parentCategoryOfProduct?.name.split(' ')).toString().replaceAll(',', ' ')} </span>
-                <span>{Capitelize(product.childCategoryOfProduct?.name.split(' ')).toString().replaceAll(',', ' ')}</span>
+                <span> {Capitalize(product.parentCategoryOfProduct?.name.split(' ')).toString().replaceAll(',', ' ')} </span>
+                <span>{Capitalize(product.childCategoryOfProduct?.name.split(' ')).toString().replaceAll(',', ' ')}</span>
             </p>
-            <p>Colour: <span>{Capitelize(product.color.split(' ')).toString().replaceAll(',', ' ')}</span></p>
+            <p>Colour: <span>{Capitalize(product.color.split(' ')).toString().replaceAll(',', ' ')}</span></p>
         </div>
         <Form
             name='formProductDetail'

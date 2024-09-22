@@ -7,10 +7,11 @@ import './Style.css'
 import { APP_URLS } from "constants/variable"
 import { TabTitle } from "utils/TabTitle"
 import { useDispatch, useSelector } from "react-redux"
-import { cartSelector, getCartDetailAsync, getSizesOfProductAsync, saveListCartItemsChoosed } from "./CartSlice"
+import { cartSelector, getCartDetailAsync, saveListCartItemsChoosed } from "./CartSlice"
 import { Modal, Spin } from "antd"
 import ProductAlsoLike from "./components/ProductsAlsoLike"
 import { ExclamationCircleFilled } from "@ant-design/icons"
+import { getDetailProductAsync, productSelector } from "../ProductDetail/ProductSlice"
 
 const CartDetail = (props) => {
     const { openNotification } = props
@@ -20,6 +21,8 @@ const CartDetail = (props) => {
     const dispatch = useDispatch();
 
     const cart = useSelector(cartSelector)
+
+    const product = useSelector(productSelector)
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [listCartItem, setListCartItem] = useState({
@@ -36,10 +39,15 @@ const CartDetail = (props) => {
         } else {
             let checkout = true;
             for (const item of listCartItemChoose) {
-                const sizes = await dispatch(getSizesOfProductAsync(item.product.id))
-
-                if (sizes.payload.success) {
-                    const size = sizes.payload.results.find(s => s.name === item.size)
+                const product = await dispatch(getDetailProductAsync(item.product.id))
+                if (product.payload.success) {
+                    // Check the price again if there is any change
+                    if (product.payload.results.discountedPrice !== item.product.discountedPrice) {
+                        checkout = false
+                        break
+                    }
+                    // Check if the product is in stock or not
+                    const size = product.payload.results.sizes.find(s => s.name === item.size)
                     if (size) {
                         if (size.quantity < item.quantity || size.quantity === 0) {
                             checkout = false
@@ -71,9 +79,9 @@ const CartDetail = (props) => {
                 data: response.payload.results.listCartItems,
                 visible: 5
             })
-            openNotification("Update your cart success. Now you can continue shopping!!!", 'success');
+            openNotification("Update your cart success. Now you can continue shopping !!!", 'success');
         } else {
-            openNotification("Update your cart failed. Please reload your website!!!", 'error');
+            openNotification("Update your cart failed. Please reload your website !!!", 'error');
         }
         setIsModalOpen(false)
         setCheckedList([])
@@ -101,7 +109,7 @@ const CartDetail = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [checkedList])
 
-    return <Spin tip="Loading" size="large" spinning={cart.isLoading || cart.isLoadListProducts}>
+    return <Spin tip="Loading" size="large" spinning={cart.isLoading || cart.isLoadListProducts || product.isLoading}>
         <div className="min-h-screen pt-6">
             <div className="flex justify-between px-[180px] mb-12">
                 <Bag
